@@ -1,0 +1,126 @@
+version: "3.9"
+
+services:
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    env_file:
+      - ./envs/main.env
+    volumes:
+      - ./nginx/templates/nginx.conf.template:/etc/nginx/templates/nginx.conf.template
+      - ./certs:/etc/nginx/certs:ro
+    # depends_on:
+    #   - rust-backend
+    #   - node-backend
+    # command: >
+    #   /bin/sh -c "envsubst < /etc/nginx/templates/nginx.conf.template > /etc/nginx/nginx.conf && nginx -g 'daemon off;'"
+    command: >
+      /bin/sh -c "envsubst '$$RUST_HOST $$RUST_PORT $$NODE_HOST $$NODE_PORT' < /etc/nginx/templates/nginx.conf.template > /etc/nginx/nginx.conf && nginx -g 'daemon off;'"
+
+  rust-backend:
+    build: ./rust
+    container_name: rust-backend
+    env_file:
+      - ./envs/main.env
+    depends_on:
+      - postgres
+      - redis
+      # - kafka
+
+  node-backend:
+    build: ./node
+    container_name: node-backend
+    env_file:
+      - ./envs/main.env
+    depends_on:
+      - postgres
+      - redis
+      # - kafka
+
+  postgres:
+    image: postgres:15
+    container_name: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_PORT: ${POSTGRES_PORT}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  migrate:
+    image: flyway/flyway:latest
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_PORT: ${POSTGRES_PORT}
+    depends_on:
+      - postgres
+    command: >
+      -url=jdbc:postgresql://postgres:${POSTGRES_PORT}/${POSTGRES_DB}
+      -user=${POSTGRES_USER}
+      -password=${POSTGRES_PASSWORD}
+      -connectRetries=10
+      migrate
+    volumes:
+      - ./migrations:/flyway/sql
+
+  redis:
+    image: redis:7
+    container_name: redis
+
+  minio:
+    image: minio/minio
+    command: server /data --console-address ":9001"
+    ports:
+      - "9000:9000" # S3 API
+      - "9001:9001" # Web UI
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    volumes:
+      - minio_data:/data
+  # kafka:
+  #   image: bitnami/kafka:latest
+  #   container_name: kafka
+  #   ports:
+  #     - "9092:9092"
+  #   environment:
+  #     # Включаем KRaft (без ZooKeeper)
+  #     KAFKA_ENABLE_KRAFT: "yes"
+
+  #     # Роли
+  #     KAFKA_CFG_PROCESS_ROLES: broker,controller
+
+  #     # ID ноды
+  #     KAFKA_CFG_NODE_ID: 1
+
+  #     # Контроллер
+  #     KAFKA_CFG_CONTROLLER_QUORUM_VOTERS: 1@kafka:9093
+
+  #     # Listeners
+  #     KAFKA_CFG_LISTENERS: PLAINTEXT://:9092,CONTROLLER://:9093
+  #     KAFKA_CFG_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+  #     KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+
+  #     # Контроллер listener
+  #     KAFKA_CFG_CONTROLLER_LISTENER_NAMES: CONTROLLER
+
+  #     # Для одиночной ноды
+  #     KAFKA_CFG_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+  #     KAFKA_CFG_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+  #     KAFKA_CFG_TRANSACTION_STATE_LOG_MIN_ISR: 1
+
+  #   volumes:
+  #     - kafka_data:/bitnami/kafka
+
+volumes:
+  postgres_data:
+  minio_data:
+  migrations:
+  # kafka_data:

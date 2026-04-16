@@ -1,0 +1,7 @@
+envs
+certs
+
+.pem
+
+*.env
+!.env.example
