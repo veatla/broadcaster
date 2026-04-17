@@ -8,11 +8,11 @@ const URL = `postgres://${userdata}@${host}/${process.env.POSTGRES_DB}`;
 const db = drizzle(URL);
 
 export const bytea = customType<{
-  data: Buffer;
-  default: false;
+    data: Buffer;
+    default: false;
 }>({
-  dataType() {
-    return "bytea";
-  },
+    dataType() {
+        return "bytea";
+    },
 });
 export default db;

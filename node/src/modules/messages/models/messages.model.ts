@@ -1,36 +1,31 @@
 import { sql } from "drizzle-orm";
-import {
-  pgTable,
-  uuid,
-  text,
-  timestamp,
-  primaryKey,
-  foreignKey,
-} from "drizzle-orm/pg-core";
-import { users } from "../../users/models/users.model";
-import { chats } from "../../chats/models/chats.model";
+import { pgTable, uuid, text, timestamp } from "drizzle-orm/pg-core";
 
-export const messages = pgTable("messages", {
-  id: uuid("id").notNull().default(sql`uuid_generate_v4()`),
-  chat_id: uuid("chat_id").notNull().references(() => chats.id, { onDelete: 'cascade' }),
-  sender_id: uuid("sender_id").references(() => users.id, { onDelete: 'set null' }),
-  replied_to: uuid("replied_to"),
-  content: text("content"),
-  created_at: timestamp("created_at").notNull().defaultNow(),
-  updated_at: timestamp("updated_at"),
-}, (table) => [
-  foreignKey({ columns: [table.replied_to], foreignColumns: [table.id] }).onDelete('set null')
-]);
+export const messagesTable = pgTable("messages", {
+    id: uuid("id")
+        .default(sql`uuid_generate_v4()`)
+        .primaryKey(),
+    chat_id: uuid("chat_id").notNull(),
+    sender_id: uuid("sender_id"),
+    replied_to: uuid("replied_to"),
+    content: text("content"),
+    created_at: timestamp("created_at").notNull().defaultNow(),
+    updated_at: timestamp("updated_at"),
+});
+export type MessagesTable = typeof messagesTable.$inferSelect;
 
-export const message_reads = pgTable("message_reads", {
-  message_id: uuid("message_id").notNull().references(() => messages.id, { onDelete: 'cascade' }),
-  user_id: uuid("user_id").notNull().references(() => users.id, { onDelete: 'cascade' }),
-  read_at: timestamp("read_at").notNull().defaultNow(),
+export const messageReadsTable = pgTable("message_reads", {
+    message_id: uuid("message_id").notNull(),
+    user_id: uuid("user_id").notNull(),
+    read_at: timestamp("read_at").notNull().defaultNow(),
+});
+export type MessageReadsTable = typeof messageReadsTable.$inferSelect;
+
+export const messageReactionsTable = pgTable("message_reactions", {
+    message_id: uuid("message_id").notNull(),
+    user_id: uuid("user_id").notNull(),
+    emoji: text("emoji").notNull(),
+    created_at: timestamp("created_at").notNull().defaultNow(),
 });
 
-export const message_reactions = pgTable("message_reactions", {
-  message_id: uuid("message_id").notNull().references(() => messages.id, { onDelete: 'cascade' }),
-  user_id: uuid("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
-  emoji: text("emoji").notNull(),
-  created_at: timestamp("created_at").notNull().defaultNow(),
-}, (table) => [primaryKey({ columns: [table.user_id, table.message_id, table.emoji] })]);
+export type MessageReactionsTable = typeof messageReactionsTable.$inferSelect;
