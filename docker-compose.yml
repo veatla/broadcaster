@@ -12,11 +12,11 @@ services:
     volumes:
       - ./nginx/templates/nginx.conf.template:/etc/nginx/templates/nginx.conf.template
       - ./certs:/etc/nginx/certs:ro
+    extra_hosts:
+      - "host.docker.internal:host-gateway" #При локальной разработке помогает чтобы localhost:3000 работал с nginx
     # depends_on:
     #   - rust-backend
     #   - node-backend
-    # command: >
-    #   /bin/sh -c "envsubst < /etc/nginx/templates/nginx.conf.template > /etc/nginx/nginx.conf && nginx -g 'daemon off;'"
     command: >
       /bin/sh -c "envsubst '$$RUST_HOST $$RUST_PORT $$NODE_HOST $$NODE_PORT' < /etc/nginx/templates/nginx.conf.template > /etc/nginx/nginx.conf && nginx -g 'daemon off;'"
 

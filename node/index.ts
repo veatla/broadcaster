@@ -10,7 +10,7 @@ app.get("/", (req, res) => {
   res.send("Hello world");
 });
 
-const listener = server.listen(PORT, () => {
+const listener = server.listen(Number(PORT), '0.0.0.0', () => {
   const address = listener.address();
   if (typeof address === "string" || !address) process.exit(1);
 
