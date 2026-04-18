@@ -1,5 +1,6 @@
-import { drizzle } from "drizzle-orm/bun-sql";
-import { customType } from "drizzle-orm/pg-core";
+import type { ExtractTablesWithRelations } from "drizzle-orm";
+import { drizzle, type BunSQLQueryResultHKT } from "drizzle-orm/bun-sql";
+import { customType, PgTransaction } from "drizzle-orm/pg-core";
 
 const userdata = `${process.env.POSTGRES_USER}:${process.env.POSTGRES_PASSWORD}`;
 const host = `${process.env.POSTGRES_HOST}:${process.env.POSTGRES_PORT}`;
@@ -15,4 +16,6 @@ export const bytea = customType<{
         return "bytea";
     },
 });
+
+export type Transaction = PgTransaction<BunSQLQueryResultHKT, Record<string, never>, ExtractTablesWithRelations<Record<string, never>>>;
 export default db;
