@@ -1,8 +1,8 @@
 import z from "zod";
-import { $ } from "../../../lib/request";
 import * as argon2 from "argon2";
 import AuthModule from "../models/auth.model";
 import db from "../../../db/drizzle.client";
+import { $ } from "$app/core/request";
 
 export const userRegisterSchema = z.object({
     nickname: z.string(),
@@ -28,7 +28,7 @@ export const userRegisterHandler = $(
         return user;
     },
     {
-        authRequired: false,
+        auth: "disabled",
         body: userRegisterSchema,
     },
 );

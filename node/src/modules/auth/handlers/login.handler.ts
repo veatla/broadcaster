@@ -1,5 +1,5 @@
+import { $ } from "$app/core/request";
 import z from "zod";
-import { $ } from "../../../lib/request";
 
 export const userLoginSchema = z.object({
     login: z.string(),
@@ -11,7 +11,7 @@ export const userLoginHandler = $(
         return;
     },
     {
-        authRequired: false,
+        auth: "disabled",
         body: userLoginSchema,
     },
 );

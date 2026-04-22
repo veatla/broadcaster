@@ -27,7 +27,7 @@ interface EndpointHandler {
             params?: Params;
 
             /** Whenever route is requires authorization */
-            authRequired: AuthRequired;
+            auth: AuthRequired;
         },
     ): void;
 }
@@ -124,16 +124,16 @@ export const $ = function <
         body?: Body;
         query?: Query;
         params?: Params;
-        authRequired: AuthRequired;
+        auth: AuthRequired;
     },
 ) {
-    const { authRequired = "optional", body: bodySchema, query: querySchema, params: paramsSchema } = options;
+    const { auth = "optional", body: bodySchema, query: querySchema, params: paramsSchema } = options;
 
     return async (req: Request, res: Response) => {
         try {
             const sessionToken = req.cookies?.[sessionCookieName] ?? (req.headers[sessionCookieName] as string);
             // Parse Bearer token provided in request header
-            const { session, user } = await validateSessionToken(sessionToken, authRequired);
+            const { session, user } = await validateSessionToken(sessionToken, auth);
 
             // Response status
             let status = 200;
