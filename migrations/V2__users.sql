@@ -2,7 +2,7 @@ CREATE TABLE IF NOT EXISTS users (
     id                  UUID            NOT NULL    PRIMARY KEY DEFAULT uuid_generate_v4(),
     nickname            TEXT            NOT NULL    UNIQUE,
     password_hash       TEXT            NOT NULL,
-    public_key          TEXT            NULL,
+    public_key          TEXT            NOT NULL,
     profile_photo       TEXT            NULL,       -- FK added after attachments table is created
     first_name          TEXT            NOT NULL,
     last_name           TEXT            NOT NULL,

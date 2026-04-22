@@ -1,6 +1,6 @@
 import { sql } from "drizzle-orm";
 import { pgTable, uuid, text, bigint, boolean, timestamp, primaryKey } from "drizzle-orm/pg-core";
-import { bytea } from "../../../db/db";
+import { bytea } from "../../../db/drizzle.client";
 
 export const usersTable = pgTable("users", {
     id: uuid("id")

@@ -1,5 +1,5 @@
 import { eq } from "drizzle-orm";
-import db, { type Transaction } from "../../../db/db";
+import db, { type Transaction } from "../../../db/drizzle.client";
 import { usersTable } from "../../users/models/users.model";
 import { APIError } from "../../../lib/errors/api-error";
 

@@ -1,10 +1,10 @@
 import { Router, type Request, type Response } from "express";
 import z, { ZodError, type ZodType } from "zod";
-import db from "../db/db";
 import { userSessionsTable, usersTable, type UsersTable } from "../modules/users/models/users.model";
 import { eq } from "drizzle-orm";
 import { UnauthorizedError } from "./errors/unauthorized-error";
 import { APIError } from "./errors/api-error";
+import db from "../db/drizzle.client";
 
 export const sessionCookieName = "auth-session";
 

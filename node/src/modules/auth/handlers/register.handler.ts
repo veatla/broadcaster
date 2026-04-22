@@ -2,7 +2,7 @@ import z from "zod";
 import { $ } from "../../../lib/request";
 import * as argon2 from "argon2";
 import AuthModule from "../models/auth.model";
-import db from "../../../db/db";
+import db from "../../../db/drizzle.client";
 
 export const userRegisterSchema = z.object({
     nickname: z.string(),
