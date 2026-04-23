@@ -17,5 +17,11 @@ export const bytea = customType<{
     },
 });
 
+export const citext = customType<{ data: string; default: false }>({
+    dataType() {
+        return "citext";
+    },
+});
+
 export type Transaction = PgTransaction<BunSQLQueryResultHKT, Record<string, never>, ExtractTablesWithRelations<Record<string, never>>>;
 export default db;

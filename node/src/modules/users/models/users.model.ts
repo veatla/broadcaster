@@ -8,7 +8,6 @@ export const usersTable = pgTable("users", {
         .default(sql`uuid_generate_v4()`),
     nickname: text("nickname").unique().notNull(),
     password_hash: text("password_hash").notNull(),
-    public_key: text("public_key").notNull(),
     profile_photo: text("profile_photo"),
     first_name: text("first_name").notNull(),
     last_name: text("last_name").notNull(),
