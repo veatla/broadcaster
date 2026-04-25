@@ -226,6 +226,7 @@ export const chatMembersTable = pgTable(
             .default(sql`NOW()`),
         left_at: timestamp("left_at", { withTimezone: true }),
         manually_unread: boolean("manually_unread").notNull().default(false),
+        cleared_at: timestamp("cleared_at", { withTimezone: true }),
     },
     (t) => [primaryKey({ columns: [t.chat_id, t.user_id] })],
 );
@@ -244,27 +245,27 @@ export const messagesTable = pgTable("messages", {
     sender_device_id: uuid("sender_device_id")
         .notNull()
         .references(() => devicesTable.id),
-    ciphertext: bytea("ciphertext").notNull(),
-    x3dh_header: bytea("x3dh_header"),
-    msg_type: text("msg_type").$type<"message" | "control" | "sync">().notNull().default("message"),
+    content: text("content").notNull(),
+    // ciphertext: bytea("ciphertext").notNull(),
+    // x3dh_header: bytea("x3dh_header"),
+    // msg_type: text("msg_type").$type<"message" | "control" | "sync">().notNull().default("message"),
     created_at: timestamp("created_at", { withTimezone: true })
         .notNull()
         .default(sql`NOW()`),
 });
 export type MessagesTable = typeof messagesTable.$inferSelect;
 
-export const messageReadsTable = pgTable(
-    "message_reads",
+export const messageUserStateTable = pgTable(
+    "message_user_state",
     {
         message_id: uuid("message_id").notNull(),
         user_id: uuid("user_id").notNull(),
-        read_at: timestamp("read_at")
-            .notNull()
-            .default(sql`NOW()`),
+        deleted_at: timestamp("deleted_at", { withTimezone: true }),
+        read_at: timestamp("read_at", { withTimezone: true }),
     },
     (t) => [primaryKey({ columns: [t.message_id, t.user_id] })],
 );
-export type MessageReadsTable = typeof messageReadsTable.$inferSelect;
+export type MessageUserTable = typeof messageUserStateTable.$inferSelect;
 
 export const messageReactionsTable = pgTable(
     "message_reactions",
@@ -339,7 +340,7 @@ export const tables = {
     chats: chatsTable,
     chatMembers: chatMembersTable,
     messages: messagesTable,
-    messageReads: messageReadsTable,
+    messageReads: messageUserStateTable,
     messageReactions: messageReactionsTable,
     attachments: attachmentsTable,
     stories: storiesTable,

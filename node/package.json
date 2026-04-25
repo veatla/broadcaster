@@ -4,8 +4,8 @@
     "type": "module",
     "private": true,
     "scripts": {
-        "start": "bun index.js",
-        "dev": "bun --watch index.js"
+        "start": "bun ./src/index.js",
+        "dev": "bun --watch ./src/index.js"
     },
     "devDependencies": {
         "@types/bun": "latest",

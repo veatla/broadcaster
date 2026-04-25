@@ -1,6 +1,5 @@
 import { sql } from "drizzle-orm";
 import { pgTable, uuid, text, boolean, timestamp } from "drizzle-orm/pg-core";
-import { usersTable } from "../../users/models/users.model";
 
 export const chatsTable = pgTable("chats", {
     id: uuid("id")
@@ -9,11 +8,6 @@ export const chatsTable = pgTable("chats", {
     avatar: text("avatar"),
     title: text("title").notNull(),
     type: text("type").notNull().$type<"private" | "group" | "channel">(),
-
-    // Только для type = 'private': денормализованная пара участников для уникального индекса
-    user1_id: uuid("user1_id").references(() => usersTable.id),
-    user2_id: uuid("user2_id").references(() => usersTable.id),
-
     created_at: timestamp("created_at").notNull().defaultNow(),
 });
 
