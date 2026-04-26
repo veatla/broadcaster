@@ -1,33 +1,34 @@
-import AlignCenter from '@lucide/svelte/icons/align-center';
-import AlighJustify from '@lucide/svelte/icons/align-justify';
-import AlignLeft from '@lucide/svelte/icons/align-left';
-import AlignRight from '@lucide/svelte/icons/align-right';
-import Audio from '@lucide/svelte/icons/audio-lines';
-import Bold from '@lucide/svelte/icons/bold';
-import Code from '@lucide/svelte/icons/code';
-import IFrame from '@lucide/svelte/icons/code-xml';
-import Heading1 from '@lucide/svelte/icons/heading-1';
-import Heading2 from '@lucide/svelte/icons/heading-2';
-import Heading3 from '@lucide/svelte/icons/heading-3';
-import Heading4 from '@lucide/svelte/icons/heading-4';
-import Image from '@lucide/svelte/icons/image';
-import Italic from '@lucide/svelte/icons/italic';
-import Link from '@lucide/svelte/icons/link-2';
-import List from '@lucide/svelte/icons/list';
-import ListChecks from '@lucide/svelte/icons/list-checks';
-import ListOrdered from '@lucide/svelte/icons/list-ordered';
-import Pilcrow from '@lucide/svelte/icons/pilcrow';
-import Quote from '@lucide/svelte/icons/quote';
-import Radical from '@lucide/svelte/icons/radical';
-import Redo from '@lucide/svelte/icons/redo-2';
-import SquareRadical from '@lucide/svelte/icons/square-radical';
-import StrikeThrough from '@lucide/svelte/icons/strikethrough';
-import Subscript from '@lucide/svelte/icons/subscript';
-import Superscript from '@lucide/svelte/icons/superscript';
-import Table from '@lucide/svelte/icons/table';
-import Underline from '@lucide/svelte/icons/underline';
-import Undo from '@lucide/svelte/icons/undo-2';
-import Video from '@lucide/svelte/icons/video';
+import {
+	RiAlignCenter,
+	RiAlignJustify,
+	RiAlignLeft,
+	RiAlignRight,
+	RiMusicLine,
+	RiBold,
+	RiCodeSLine,
+	RiCodeBoxLine,
+	RiH1,
+	RiH2,
+	RiH3,
+	RiH4,
+	RiImageLine,
+	RiItalic,
+	RiLinkM,
+	RiListUnordered,
+	RiListCheck2,
+	RiListOrdered,
+	RiParagraph,
+	RiDoubleQuotesL,
+	RiSquareRoot,
+	RiArrowGoForwardLine,
+	RiStrikethrough,
+	RiSubscript,
+	RiSuperscript,
+	RiTable2,
+	RiUnderline,
+	RiArrowGoBackLine,
+	RiVideoLine
+} from 'remixicon-svelte';
 import { isTextSelection } from '@tiptap/core';
 import { isMac } from '../utils.js';
 import type { EdraToolBarCommands } from './types.js';
@@ -36,7 +37,7 @@ import strings from '../strings.js';
 const commands: Record<string, EdraToolBarCommands[]> = {
 	'undo-redo': [
 		{
-			icon: Undo,
+			icon: RiArrowGoBackLine,
 			name: 'undo',
 			tooltip: strings.command.undo,
 			shortCut: `${isMac ? '⌘' : 'Ctrl+'}Z`,
@@ -48,7 +49,7 @@ const commands: Record<string, EdraToolBarCommands[]> = {
 			}
 		},
 		{
-			icon: Redo,
+			icon: RiArrowGoForwardLine,
 			name: 'redo',
 			tooltip: strings.command.redo,
 			shortCut: `${isMac ? '⌘' : 'Ctrl+'}Y`,
@@ -62,7 +63,7 @@ const commands: Record<string, EdraToolBarCommands[]> = {
 	],
 	headings: [
 		{
-			icon: Heading1,
+			icon: RiH1,
 			name: 'h1',
 			tooltip: strings.command.h1,
 			shortCut: `${isMac ? '⌘⌥' : 'Ctrl+Alt+'}1`,
@@ -80,7 +81,7 @@ const commands: Record<string, EdraToolBarCommands[]> = {
 			}
 		},
 		{
-			icon: Heading2,
+			icon: RiH2,
 			name: 'h2',
 			tooltip: strings.command.h2,
 			shortCut: `${isMac ? '⌘⌥' : 'Ctrl+Alt+'}2`,
@@ -98,7 +99,7 @@ const commands: Record<string, EdraToolBarCommands[]> = {
 			}
 		},
 		{
-			icon: Heading3,
+			icon: RiH3,
 			name: 'h3',
 			tooltip: strings.command.h3,
 			shortCut: `${isMac ? '⌘⌥' : 'Ctrl+Alt+'}3`,
@@ -116,7 +117,7 @@ const commands: Record<string, EdraToolBarCommands[]> = {
 			}
 		},
 		{
-			icon: Heading4,
+			icon: RiH4,
 			name: 'h4',
 			tooltip: strings.command.h4,
 			shortCut: `${isMac ? '⌘⌥' : 'Ctrl+Alt+'}4`,
@@ -136,7 +137,7 @@ const commands: Record<string, EdraToolBarCommands[]> = {
 	],
 	'text-formatting': [
 		{
-			icon: Link,
+			icon: RiLinkM,
 			name: 'link',
 			tooltip: strings.command.link,
 			onClick: (editor) => {
@@ -154,7 +155,7 @@ const commands: Record<string, EdraToolBarCommands[]> = {
 			}
 		},
 		{
-			icon: Pilcrow,
+			icon: RiParagraph,
 			name: 'paragraph',
 			tooltip: 'Paragraph',
 			shortCut: `${isMac ? '⌘⇧' : 'Ctrl+Shift+'}0`,
@@ -172,7 +173,7 @@ const commands: Record<string, EdraToolBarCommands[]> = {
 			}
 		},
 		{
-			icon: Bold,
+			icon: RiBold,
 			name: 'bold',
 			tooltip: strings.command.bold,
 			shortCut: `${isMac ? '⌘' : 'Ctrl+'}B`,
@@ -190,7 +191,7 @@ const commands: Record<string, EdraToolBarCommands[]> = {
 			}
 		},
 		{
-			icon: Italic,
+			icon: RiItalic,
 			name: 'italic',
 			tooltip: strings.command.italic,
 			shortCut: `${isMac ? '⌘' : 'Ctrl+'}I`,
@@ -208,7 +209,7 @@ const commands: Record<string, EdraToolBarCommands[]> = {
 			}
 		},
 		{
-			icon: Underline,
+			icon: RiUnderline,
 			name: 'underline',
 			tooltip: strings.command.underline,
 			shortCut: `${isMac ? '⌘' : 'Ctrl+'}U`,
@@ -226,7 +227,7 @@ const commands: Record<string, EdraToolBarCommands[]> = {
 			}
 		},
 		{
-			icon: StrikeThrough,
+			icon: RiStrikethrough,
 			name: 'strikethrough',
 			tooltip: strings.command.strikethrough,
 			shortCut: `${isMac ? '⌘⇧' : 'Ctrl+Shift+'}S`,
@@ -244,7 +245,7 @@ const commands: Record<string, EdraToolBarCommands[]> = {
 			}
 		},
 		{
-			icon: Quote,
+			icon: RiDoubleQuotesL,
 			name: 'blockQuote',
 			tooltip: strings.command.blockQuote,
 			shortCut: `${isMac ? '⌘⇧' : 'Ctrl+Shift+'}B`,
@@ -262,7 +263,7 @@ const commands: Record<string, EdraToolBarCommands[]> = {
 			}
 		},
 		{
-			icon: Code,
+			icon: RiCodeSLine,
 			name: 'code',
 			tooltip: strings.command.code,
 			shortCut: `${isMac ? '⌘' : 'Ctrl+'}E`,
@@ -280,7 +281,7 @@ const commands: Record<string, EdraToolBarCommands[]> = {
 			}
 		},
 		{
-			icon: Superscript,
+			icon: RiSuperscript,
 			name: 'superscript',
 			tooltip: strings.command.superscript,
 			shortCut: `${isMac ? '⌘' : 'Ctrl+'}.`,
@@ -295,7 +296,7 @@ const commands: Record<string, EdraToolBarCommands[]> = {
 			}
 		},
 		{
-			icon: Subscript,
+			icon: RiSubscript,
 			name: 'subscript',
 			tooltip: strings.command.subscript,
 			shortCut: `${isMac ? '⌘' : 'Ctrl+'},`,
@@ -312,7 +313,7 @@ const commands: Record<string, EdraToolBarCommands[]> = {
 	],
 	alignment: [
 		{
-			icon: AlignLeft,
+			icon: RiAlignLeft,
 			name: 'align-left',
 			tooltip: strings.command.alignLeft,
 			shortCut: `${isMac ? '⌘⇧' : 'Ctrl+Shift+'}L`,
@@ -328,7 +329,7 @@ const commands: Record<string, EdraToolBarCommands[]> = {
 			isActive: (editor) => editor.isActive({ textAlign: 'left' })
 		},
 		{
-			icon: AlignCenter,
+			icon: RiAlignCenter,
 			name: 'align-center',
 			tooltip: strings.command.alignCenter,
 			shortCut: `${isMac ? '⌘⇧' : 'Ctrl+Shift+'}E`,
@@ -344,7 +345,7 @@ const commands: Record<string, EdraToolBarCommands[]> = {
 			isActive: (editor) => editor.isActive({ textAlign: 'center' })
 		},
 		{
-			icon: AlignRight,
+			icon: RiAlignRight,
 			name: 'align-right',
 			tooltip: strings.command.alignRight,
 			shortCut: `${isMac ? '⌘⇧' : 'Ctrl+Shift+'}R`,
@@ -360,7 +361,7 @@ const commands: Record<string, EdraToolBarCommands[]> = {
 			isActive: (editor) => editor.isActive({ textAlign: 'right' })
 		},
 		{
-			icon: AlighJustify,
+			icon: RiAlignJustify,
 			name: 'align-justify',
 			tooltip: strings.command.alignJustify,
 			shortCut: `${isMac ? '⌘⇧' : 'Ctrl+Shift+'}J`,
@@ -378,7 +379,7 @@ const commands: Record<string, EdraToolBarCommands[]> = {
 	],
 	lists: [
 		{
-			icon: List,
+			icon: RiListUnordered,
 			name: 'bulletList',
 			tooltip: strings.command.bulletList,
 			shortCut: `${isMac ? '⌘⇧' : 'Ctrl+Shift+'}8`,
@@ -391,7 +392,7 @@ const commands: Record<string, EdraToolBarCommands[]> = {
 			isActive: (editor) => editor.isActive('bulletList')
 		},
 		{
-			icon: ListOrdered,
+			icon: RiListOrdered,
 			name: 'orderedList',
 			tooltip: strings.command.orderedList,
 			shortCut: `${isMac ? '⌘⇧' : 'Ctrl+Shift+'}7`,
@@ -409,7 +410,7 @@ const commands: Record<string, EdraToolBarCommands[]> = {
 			}
 		},
 		{
-			icon: ListChecks,
+			icon: RiListCheck2,
 			name: 'taskList',
 			tooltip: strings.command.taskList,
 			shortCut: `${isMac ? '⌘⇧' : 'Ctrl+Shift+'}9`,
@@ -429,7 +430,7 @@ const commands: Record<string, EdraToolBarCommands[]> = {
 	],
 	media: [
 		{
-			icon: Image,
+			icon: RiImageLine,
 			name: 'image-placeholder',
 			tooltip: strings.command.imagePlaceholder,
 			onClick: (editor) => {
@@ -438,7 +439,7 @@ const commands: Record<string, EdraToolBarCommands[]> = {
 			isActive: (editor) => editor.isActive('image-placeholder')
 		},
 		{
-			icon: Video,
+			icon: RiVideoLine,
 			name: 'video-placeholder',
 			tooltip: strings.command.videoPlaceholder,
 			onClick: (editor) => {
@@ -447,7 +448,7 @@ const commands: Record<string, EdraToolBarCommands[]> = {
 			isActive: (editor) => editor.isActive('video-placeholder')
 		},
 		{
-			icon: Audio,
+			icon: RiMusicLine,
 			name: 'audio-placeholder',
 			tooltip: strings.command.audioPlaceholder,
 			onClick: (editor) => {
@@ -456,7 +457,7 @@ const commands: Record<string, EdraToolBarCommands[]> = {
 			isActive: (editor) => editor.isActive('audio-placeholder')
 		},
 		{
-			icon: IFrame,
+			icon: RiCodeBoxLine,
 			name: 'iframe-placeholder',
 			tooltip: strings.command.iframePlaceholder,
 			onClick: (editor) => {
@@ -467,7 +468,7 @@ const commands: Record<string, EdraToolBarCommands[]> = {
 	],
 	table: [
 		{
-			icon: Table,
+			icon: RiTable2,
 			name: 'table',
 			tooltip: strings.command.table,
 			onClick: (editor) => {
@@ -485,7 +486,7 @@ const commands: Record<string, EdraToolBarCommands[]> = {
 	],
 	math: [
 		{
-			icon: Radical,
+			icon: RiSquareRoot,
 			name: 'mathematics',
 			tooltip: strings.command.inlineExpression,
 			onClick: (editor) => {
@@ -501,7 +502,7 @@ const commands: Record<string, EdraToolBarCommands[]> = {
 			isActive: (editor) => editor.isActive('inlineMath')
 		},
 		{
-			icon: SquareRadical,
+			icon: RiSquareRoot,
 			name: 'mathematics',
 			tooltip: strings.command.blockExpression,
 			onClick: (editor) => {

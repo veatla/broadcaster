@@ -2,8 +2,7 @@
 	import { buttonVariants } from '$lib/components/ui/button/index.js';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
 	import { cn } from '$lib/utils.js';
-	import ChevronDown from '@lucide/svelte/icons/chevron-down';
-	import Paragraph from '@lucide/svelte/icons/pilcrow';
+	import { RiArrowDownSLine as ChevronDown, RiParagraph as Paragraph } from 'remixicon-svelte';
 	import type { Editor } from '@tiptap/core';
 	import commands from '../../../commands/toolbar-commands.js';
 	import EdraToolTip from '../EdraToolTip.svelte';

@@ -7,8 +7,7 @@
 	import { Input } from '$lib/components/ui/input/index.js';
 	import * as Popover from '$lib/components/ui/popover/index.js';
 	import * as Tabs from '$lib/components/ui/tabs/index.js';
-	import Loader from '@lucide/svelte/icons/loader';
-	import Video from '@lucide/svelte/icons/video';
+	import { RiLoaderLine as Loader, RiVideoLine as Video } from 'remixicon-svelte';
 	import { NodeViewWrapper } from 'svelte-tiptap';
 	import { FileType } from '../../utils.js';
 	import { toast } from 'svelte-sonner';

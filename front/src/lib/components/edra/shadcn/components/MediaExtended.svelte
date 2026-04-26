@@ -2,14 +2,16 @@
 	import { Button, buttonVariants } from '$lib/components/ui/button/index.js';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
 	import { cn } from '$lib/utils.js';
-	import AlignCenter from '@lucide/svelte/icons/text-align-center';
-	import AlignLeft from '@lucide/svelte/icons/text-align-start';
-	import AlignRight from '@lucide/svelte/icons/text-align-end';
-	import Captions from '@lucide/svelte/icons/captions';
-	import CopyIcon from '@lucide/svelte/icons/copy';
-	import EllipsisVertical from '@lucide/svelte/icons/ellipsis-vertical';
-	import Fullscreen from '@lucide/svelte/icons/fullscreen';
-	import Trash from '@lucide/svelte/icons/trash';
+	import {
+		RiAlignCenter as AlignCenter,
+		RiAlignLeft as AlignLeft,
+		RiAlignRight as AlignRight,
+		RiClosedCaptioningLine as Captions,
+		RiFileCopyLine as CopyIcon,
+		RiMoreLine as EllipsisVertical,
+		RiFullscreenLine as Fullscreen,
+		RiDeleteBinLine as Trash
+	} from 'remixicon-svelte';
 	import type { NodeViewProps } from '@tiptap/core';
 	import { onDestroy, onMount, type Snippet } from 'svelte';
 	import { NodeViewWrapper } from 'svelte-tiptap';

@@ -3,13 +3,15 @@
 	import { Input } from '$lib/components/ui/input/index.js';
 	import * as Popover from '$lib/components/ui/popover/index.js';
 	import { cn } from '$lib/utils.js';
-	import ArrowLeft from '@lucide/svelte/icons/arrow-left';
-	import ArrowRight from '@lucide/svelte/icons/arrow-right';
-	import CaseSensitive from '@lucide/svelte/icons/case-sensitive';
-	import ChevronRight from '@lucide/svelte/icons/chevron-right';
-	import Replace from '@lucide/svelte/icons/replace';
-	import ReplaceAll from '@lucide/svelte/icons/replace-all';
-	import Search from '@lucide/svelte/icons/search';
+	import {
+		RiArrowLeftLine as ArrowLeft,
+		RiArrowRightLine as ArrowRight,
+		RiAB as CaseSensitive,
+		RiArrowRightSLine as ChevronRight,
+		RiFindReplaceLine as Replace,
+		RiFindReplaceLine as ReplaceAll,
+		RiSearchLine as Search
+	} from 'remixicon-svelte';
 	import type { Editor } from '@tiptap/core';
 	import { slide } from 'svelte/transition';
 	import EdraToolTip from '../EdraToolTip.svelte';

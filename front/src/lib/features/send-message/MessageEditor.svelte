@@ -4,7 +4,7 @@
 	import StarterKit from '@tiptap/starter-kit';
 	import Placeholder from '@tiptap/extension-placeholder';
 	import { Button } from '$lib/components/ui/button';
-	import { SendHorizonal } from '@lucide/svelte';
+	import { RiSendPlaneFill } from 'remixicon-svelte';
 
 	let {
 		onSend,
@@ -58,7 +58,7 @@
 </script>
 
 <div class="border-t bg-background px-4 py-3">
-	<div class="bg-muted flex items-end gap-2 rounded-xl px-3 py-1">
+	<div class="flex items-end gap-2 rounded-xl bg-muted px-3 py-1">
 		<!-- svelte-ignore a11y_no_static_element_interactions -->
 		<div bind:this={editorEl} class="flex-1 text-sm" onkeydown={onKeydown}></div>
 		<Button
@@ -68,10 +68,10 @@
 			onclick={send}
 			disabled={disabled || sending}
 		>
-			<SendHorizonal class="size-4" />
+			<RiSendPlaneFill class="size-4" />
 		</Button>
 	</div>
-	<p class="text-muted-foreground mt-1.5 text-center text-[11px]">
+	<p class="mt-1.5 text-center text-[11px] text-muted-foreground">
 		Enter to send · Shift+Enter for new line
 	</p>
 </div>

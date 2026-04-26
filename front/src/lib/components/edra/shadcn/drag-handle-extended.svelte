@@ -1,15 +1,17 @@
 <script lang="ts">
 	import { Button } from '$lib/components/ui/button/index.js';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
-	import { TextAlignCenter } from '@lucide/svelte';
-	import Clipboard from '@lucide/svelte/icons/clipboard';
-	import Duplicate from '@lucide/svelte/icons/copy';
-	import GripVertical from '@lucide/svelte/icons/grip-vertical';
-	import Palette from '@lucide/svelte/icons/palette';
-	import Plus from '@lucide/svelte/icons/plus';
-	import RemoveFormatting from '@lucide/svelte/icons/remove-formatting';
-	import Repeat2 from '@lucide/svelte/icons/repeat-2';
-	import Delete from '@lucide/svelte/icons/trash-2';
+	import {
+		RiAlignCenter as TextAlignCenter,
+		RiClipboardLine as Clipboard,
+		RiFileCopyLine as Duplicate,
+		RiDraggable as GripVertical,
+		RiPaletteLine as Palette,
+		RiAddLine as Plus,
+		RiFormatClear as RemoveFormatting,
+		RiRepeat2Line as Repeat2,
+		RiDeleteBin2Line as Delete
+	} from 'remixicon-svelte';
 	import type { Editor } from '@tiptap/core';
 	import { DragHandlePlugin } from '../extensions/drag-handle/index.js';
 	import type { Node } from '@tiptap/pm/model';

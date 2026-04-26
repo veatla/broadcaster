@@ -3,8 +3,7 @@
 	import { buttonVariants } from '$lib/components/ui/button/index.js';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
 	import { cn } from '$lib/utils.js';
-	import AlignLeft from '@lucide/svelte/icons/align-left';
-	import ChevronDown from '@lucide/svelte/icons/chevron-down';
+	import { RiAlignLeft as AlignLeft, RiArrowDownSLine as ChevronDown } from 'remixicon-svelte';
 	import type { Editor } from '@tiptap/core';
 	import EdraToolTip from '../EdraToolTip.svelte';
 	import strings from '../../../strings.js';

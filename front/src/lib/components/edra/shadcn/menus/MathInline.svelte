@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Button } from '$lib/components/ui/button/index.js';
 	import { Input } from '$lib/components/ui/input/index.js';
-	import CornerDownLeft from '@lucide/svelte/icons/corner-down-left';
+	import { RiCornerDownLeftLine as CornerDownLeft } from 'remixicon-svelte';
 	import { type Editor } from '@tiptap/core';
 	import BubbleMenu from '../../components/BubbleMenu.svelte';
 	import type { ShouldShowProps } from '../../types.js';

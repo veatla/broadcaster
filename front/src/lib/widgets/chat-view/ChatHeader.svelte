@@ -1,7 +1,7 @@
 <script lang="ts">
 	import UserAvatar from '$lib/entities/user/UserAvatar.svelte';
 	import { Button } from '$lib/components/ui/button';
-	import { Trash2 } from '@lucide/svelte';
+	import { RiDeleteBin2Line as Trash2 } from 'remixicon-svelte';
 	import type { Chat } from '$lib/shared/api';
 
 	let { chat }: { chat: Chat } = $props();

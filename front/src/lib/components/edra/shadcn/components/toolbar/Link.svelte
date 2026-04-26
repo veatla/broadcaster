@@ -4,9 +4,7 @@
 	import { Input } from '$lib/components/ui/input/index.js';
 	import * as Popover from '$lib/components/ui/popover/index.js';
 	import { cn } from '$lib/utils.js';
-	import Check from '@lucide/svelte/icons/check';
-	import ChevronDown from '@lucide/svelte/icons/chevron-down';
-	import Link from '@lucide/svelte/icons/link';
+	import { RiCheckLine as Check, RiArrowDownSLine as ChevronDown, RiLinkM as Link } from 'remixicon-svelte';
 	import type { Editor } from '@tiptap/core';
 	import EdraToolTip from '../EdraToolTip.svelte';
 	import strings from '../../../strings.js';

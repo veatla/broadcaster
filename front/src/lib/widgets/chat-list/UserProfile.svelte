@@ -1,7 +1,7 @@
 <script lang="ts">
 	import UserAvatar from '$lib/entities/user/UserAvatar.svelte';
 	import { Button } from '$lib/components/ui/button';
-	import { LogOut } from '@lucide/svelte';
+	import { RiLogoutBoxRLine as LogOut } from 'remixicon-svelte';
 	import { authApi } from '$lib/shared/api';
 	import { authStore } from '$lib/shared/stores/auth.svelte';
 	import { goto } from '$app/navigation';

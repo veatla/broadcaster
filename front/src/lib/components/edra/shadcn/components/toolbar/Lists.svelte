@@ -3,8 +3,7 @@
 	import { buttonVariants } from '$lib/components/ui/button/index.js';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
 	import { cn } from '$lib/utils.js';
-	import ChevronDown from '@lucide/svelte/icons/chevron-down';
-	import Minus from '@lucide/svelte/icons/minus';
+	import { RiArrowDownSLine as ChevronDown, RiSubtractLine as Minus } from 'remixicon-svelte';
 	import type { Editor } from '@tiptap/core';
 	import EdraToolTip from '../EdraToolTip.svelte';
 	import strings from '../../../strings.js';

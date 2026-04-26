@@ -1,11 +1,13 @@
 <script lang="ts">
 	import { Separator } from '$lib/components/ui/separator/index.js';
-	import ArrowLeft from '@lucide/svelte/icons/arrow-left';
-	import ArrowLeftFromLine from '@lucide/svelte/icons/arrow-left-from-line';
-	import ArrowRight from '@lucide/svelte/icons/arrow-right';
-	import ArrowRightFromLine from '@lucide/svelte/icons/arrow-right-from-line';
-	import Sheet from '@lucide/svelte/icons/sheet';
-	import Trash from '@lucide/svelte/icons/trash';
+	import {
+		RiArrowLeftLine as ArrowLeft,
+		RiInsertColumnLeft as ArrowLeftFromLine,
+		RiArrowRightLine as ArrowRight,
+		RiInsertColumnRight as ArrowRightFromLine,
+		RiTable2 as Sheet,
+		RiDeleteBinLine as Trash
+	} from 'remixicon-svelte';
 	import { type Editor } from '@tiptap/core';
 	import BubbleMenu from '../../components/BubbleMenu.svelte';
 	import {

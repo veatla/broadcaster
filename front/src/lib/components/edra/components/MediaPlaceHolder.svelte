@@ -1,10 +1,10 @@
 <script lang="ts">
-	import type { Icon } from '@lucide/svelte';
-	import type { Snippet } from 'svelte';
+	import type { Component, Snippet } from 'svelte';
+	import type { SVGAttributes } from 'svelte/elements';
 	import { NodeViewWrapper } from 'svelte-tiptap';
 
 	interface Props {
-		icon?: typeof Icon;
+		icon?: Component<SVGAttributes<SVGSVGElement>>;
 		title?: string;
 		onClick?: () => void;
 		class?: string;

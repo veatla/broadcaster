@@ -6,7 +6,7 @@
 	import { Button, buttonVariants } from '$lib/components/ui/button/index.js';
 	import { Input } from '$lib/components/ui/input/index.js';
 	import * as Popover from '$lib/components/ui/popover/index.js';
-	import CodeXml from '@lucide/svelte/icons/code-xml';
+	import { RiCodeBoxLine as CodeXml } from 'remixicon-svelte';
 	import { NodeViewWrapper } from 'svelte-tiptap';
 	import strings from '../../strings.js';
 

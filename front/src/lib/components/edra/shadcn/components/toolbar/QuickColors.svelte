@@ -3,7 +3,7 @@
 	import { Button, buttonVariants } from '$lib/components/ui/button/index.js';
 	import * as Popover from '$lib/components/ui/popover/index.js';
 	import { cn } from '$lib/utils.js';
-	import ChevronDown from '@lucide/svelte/icons/chevron-down';
+	import { RiArrowDownSLine as ChevronDown } from 'remixicon-svelte';
 	import type { Editor } from '@tiptap/core';
 	import EdraToolTip from '../EdraToolTip.svelte';
 	import strings from '../../../strings.js';

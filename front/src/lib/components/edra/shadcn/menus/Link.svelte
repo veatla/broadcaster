@@ -2,10 +2,12 @@
 	import SimpleTooltip from '../components/EdraToolTip.svelte';
 	import { Button } from '$lib/components/ui/button/index.js';
 	import { Input } from '$lib/components/ui/input/index.js';
-	import Check from '@lucide/svelte/icons/check';
-	import Copy from '@lucide/svelte/icons/copy';
-	import Edit from '@lucide/svelte/icons/edit';
-	import Trash from '@lucide/svelte/icons/trash';
+	import {
+		RiCheckLine as Check,
+		RiFileCopyLine as Copy,
+		RiEditLine as Edit,
+		RiDeleteBinLine as Trash
+	} from 'remixicon-svelte';
 	import type { Editor } from '@tiptap/core';
 	import BubbleMenu from '../../components/BubbleMenu.svelte';
 	import type { ShouldShowProps } from '../../types.js';

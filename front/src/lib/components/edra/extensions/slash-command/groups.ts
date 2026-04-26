@@ -1,6 +1,4 @@
-import Minus from '@lucide/svelte/icons/minus';
-import Quote from '@lucide/svelte/icons/quote';
-import SquareCode from '@lucide/svelte/icons/square-code';
+import { RiSubtractLine as Minus, RiDoubleQuotesL as Quote, RiCodeBlock as SquareCode } from 'remixicon-svelte';
 import type { Editor } from '@tiptap/core';
 import commands from '../../commands/toolbar-commands.js';
 import type { EdraToolBarCommands } from '../../commands/types.js';

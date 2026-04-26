@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Button } from '$lib/components/ui/button';
-	import { SquarePen } from '@lucide/svelte';
+	import { RiEditBoxLine as SquarePen } from 'remixicon-svelte';
 	import CreateChatDialog from '$lib/features/create-chat/CreateChatDialog.svelte';
 
 	let dialogOpen = $state(false);
