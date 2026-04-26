@@ -11,7 +11,7 @@ export const userLoginSchema = z.object({
 export const userLoginHandler = $(
     async ({ body }) => {
         return db.transaction(async (trx) => {
-            const user = await AuthModule.loginUser(trx, { username: body.username, password: body.password });
+            const user = await AuthModule.loginUser(trx, body);
             const token = await AuthModule.createSession(trx, user.id);
             return { user, token };
         });

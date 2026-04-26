@@ -8,7 +8,7 @@ const PORT = process.env.NODE_PORT ?? 3000;
 const app = express();
 
 app.use((req, res, next) => {
-    res.setHeader("Access-Control-Allow-Origin", process.env.FRONTEND_ORIGIN ?? "http://localhost:5173");
+    res.setHeader("Access-Control-Allow-Origin", process.env.FRONTEND_ORIGIN ?? "http://localhost:3030");
     res.setHeader("Access-Control-Allow-Methods", "GET,POST,PUT,PATCH,DELETE,OPTIONS");
     res.setHeader("Access-Control-Allow-Headers", "Content-Type,auth-session,Authorization");
     if (req.method === "OPTIONS") return res.sendStatus(204);

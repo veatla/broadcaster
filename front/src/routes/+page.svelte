@@ -1,4 +1,5 @@
 <script lang="ts">
+	import './layout.css';
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
 	import { authStore } from '$lib/shared/stores/auth.svelte';
@@ -83,14 +84,14 @@
 
 {#if ready}
 	<div class="flex h-screen overflow-hidden">
-		<aside class="flex w-72 shrink-0 flex-col overflow-hidden border-r">
+		<aside class="w-72 flex shrink-0 flex-col overflow-hidden border-r">
 			<ChatList />
 		</aside>
 		<main class="flex flex-1 flex-col overflow-hidden">
 			{#if chatStore.selectedChatId}
 				<ChatView />
 			{:else}
-				<div class="flex flex-1 flex-col items-center justify-center gap-2 text-muted-foreground">
+				<div class="gap-2 flex flex-1 flex-col items-center justify-center text-muted-foreground">
 					<p class="text-lg font-medium">Select a chat to start messaging</p>
 					<p class="text-sm">Click the pencil icon to start a new conversation</p>
 				</div>

@@ -21,6 +21,7 @@ class AuthModule {
 
     async loginUser(trx: Transaction, data: { username: string; password: string }) {
         const [user] = await trx.select().from(tables.users).where(eq(tables.users.username, data.username)).execute();
+        console.log(user);
         if (!user) throw new IncorrectLoginDataError();
         const is_valid = await argon2.verify(user.password_hash, data.password);
         if (!is_valid) throw new IncorrectLoginDataError();

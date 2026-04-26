@@ -3,15 +3,22 @@ import tailwindcss from '@tailwindcss/vite';
 import { defineConfig } from 'vitest/config';
 import { playwright } from '@vitest/browser-playwright';
 import { sveltekit } from '@sveltejs/kit/vite';
+import path from 'path';
 
 export default defineConfig({
+	resolve: {
+		alias: {
+			$lib: path.resolve('./src/lib')
+		}
+	},
 	server: {
 		proxy: {
 			'/api': {
 				target: 'http://localhost:3000',
 				rewrite: (path) => path.replace(/^\/api/, '')
 			}
-		}
+		},
+		port: 3030
 	},
 	plugins: [
 		tailwindcss(),
