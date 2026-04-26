@@ -89,6 +89,7 @@
 		"@tiptap/suggestion": "^3.22.4",
 		"katex": "^0.16.45",
 		"lowlight": "^3.3.0",
+		"socket.io-client": "^4.8.3",
 		"svelte-tiptap": "^3.0.1",
 		"tiptap-extension-auto-joiner": "^0.1.3"
 	}

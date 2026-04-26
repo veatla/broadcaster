@@ -9,7 +9,7 @@
 
 	let first_name = $state('');
 	let last_name = $state('');
-	let nickname = $state('');
+	let username = $state('');
 	let password = $state('');
 	let error = $state('');
 	let loading = $state(false);
@@ -19,7 +19,7 @@
 		error = '';
 		loading = true;
 		try {
-			const { user, token } = await authApi.register({ nickname, password, first_name, last_name });
+			const { user, token } = await authApi.register({ username, password, first_name, last_name });
 			authStore.login(user, token);
 			onSuccess();
 		} catch (err) {
@@ -42,15 +42,29 @@
 		</div>
 	</div>
 	<div class="space-y-1.5">
-		<Label for="reg-nickname">Nickname</Label>
-		<Input id="reg-nickname" bind:value={nickname} placeholder="john_doe" autocomplete="username" required />
+		<Label for="reg-username">Username</Label>
+		<Input
+			id="reg-username"
+			bind:value={username}
+			placeholder="john_doe"
+			autocomplete="username"
+			required
+		/>
 	</div>
 	<div class="space-y-1.5">
 		<Label for="reg-password">Password</Label>
-		<Input id="reg-password" type="password" bind:value={password} placeholder="min 8 characters" autocomplete="new-password" required minlength={8} />
+		<Input
+			id="reg-password"
+			type="password"
+			bind:value={password}
+			placeholder="min 8 characters"
+			autocomplete="new-password"
+			required
+			minlength={8}
+		/>
 	</div>
 	{#if error}
-		<p class="text-destructive text-sm">{error}</p>
+		<p class="text-sm text-destructive">{error}</p>
 	{/if}
 	<Button type="submit" class="w-full" disabled={loading}>
 		{loading ? 'Creating account…' : 'Create account'}

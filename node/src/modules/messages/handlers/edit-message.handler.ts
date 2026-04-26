@@ -4,6 +4,7 @@ import db from "$app/db/drizzle.client";
 import { eq } from "drizzle-orm";
 import { NotFound, Forbidden } from "$app/core/errors/http";
 import { messagesTable } from "$app/db/tables";
+import { getIO } from "$app/socket/io";
 
 const paramsSchema = z.object({
     id: z.uuid(),
@@ -28,6 +29,10 @@ export const editMessageHandler = $(
             .set({ content: body.content, updated_at: new Date() })
             .where(eq(messagesTable.id, params.id))
             .returning();
+
+        if (updated) {
+            getIO().to(`chat:${updated.chat_id}`).emit("message:edit", updated);
+        }
 
         return updated;
     },

@@ -13,8 +13,8 @@
 		chat.type === 'private'
 			? chat.other_first_name
 				? `${chat.other_first_name} ${chat.other_last_name ?? ''}`.trim()
-				: (chat.other_nickname ?? 'Unknown')
-			: (chat.title || 'Unnamed Chat')
+				: (chat.other_username ?? 'Unknown')
+			: chat.title || 'Unnamed Chat'
 	);
 
 	const avatarName = $derived(displayName);
@@ -30,6 +30,6 @@
 	<UserAvatar name={avatarName} photo={chat.avatar} size="md" />
 	<div class="min-w-0 flex-1">
 		<p class="truncate text-sm font-medium">{displayName}</p>
-		<p class="text-muted-foreground truncate text-xs capitalize">{chat.type}</p>
+		<p class="truncate text-xs text-muted-foreground capitalize">{chat.type}</p>
 	</div>
 </button>

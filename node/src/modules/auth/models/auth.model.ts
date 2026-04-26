@@ -2,7 +2,7 @@ import * as argon2 from "argon2";
 import { count, eq, and } from "drizzle-orm";
 import { type Transaction } from "../../../db/drizzle.client";
 import { UnavailableCreateUserError } from "../errors/unavailable-create-user";
-import { NicknameAlreadyTaken } from "../errors/nickname-already-taken";
+import { UsernameAlreadyTaken } from "../errors/username-already-taken";
 import { IncorrectLoginDataError } from "../errors/incorrect-login-data";
 import { tables } from "$app/db/tables";
 
@@ -11,7 +11,7 @@ const SESSION_TTL_MS = 30 * 24 * 60 * 60 * 1000; // 30 days
 class AuthModule {
     async createUser(trx: Transaction, data: typeof tables.users.$inferInsert) {
         const [duplicate] = await trx.select().from(tables.users).where(eq(tables.users.username, data.username!)).execute();
-        if (duplicate) throw new NicknameAlreadyTaken();
+        if (duplicate) throw new UsernameAlreadyTaken();
 
         const [user] = await trx.insert(tables.users).values(data).returning().execute();
         if (!user) throw new UnavailableCreateUserError();

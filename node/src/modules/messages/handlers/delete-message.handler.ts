@@ -4,6 +4,7 @@ import db from "$app/db/drizzle.client";
 import { eq, and } from "drizzle-orm";
 import { NotFound, Forbidden } from "$app/core/errors/http";
 import { tables } from "$app/db/tables";
+import { getIO } from "$app/socket/io";
 
 const paramsSchema = z.object({
     id: z.uuid(),
@@ -15,11 +16,15 @@ const bodySchema = z.object({
 
 export const deleteMessageHandler = $(
     async ({ params, body, user }) => {
+        let deletedChatId: string | undefined;
+
         await db.transaction(async (trx) => {
             const [message] = await trx
                 .select({ id: tables.messages.id, chat_id: tables.messages.chat_id, sender_id: tables.messages.sender_id })
                 .from(tables.messages)
                 .where(eq(tables.messages.id, params.id));
+
+            if (message) deletedChatId = message.chat_id;
 
             if (!message) throw new NotFound("Message not found");
 
@@ -64,6 +69,10 @@ export const deleteMessageHandler = $(
                     });
             }
         });
+
+        if (deletedChatId) {
+            getIO().to(`chat:${deletedChatId}`).emit("message:delete", { id: params.id, chat_id: deletedChatId });
+        }
 
         return { success: true };
     },

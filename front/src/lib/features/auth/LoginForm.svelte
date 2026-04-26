@@ -7,7 +7,7 @@
 
 	let { onSuccess }: { onSuccess: () => void } = $props();
 
-	let nickname = $state('');
+	let username = $state('');
 	let password = $state('');
 	let error = $state('');
 	let loading = $state(false);
@@ -17,7 +17,7 @@
 		error = '';
 		loading = true;
 		try {
-			const { user, token } = await authApi.login(nickname, password);
+			const { user, token } = await authApi.login(username, password);
 			authStore.login(user, token);
 			onSuccess();
 		} catch (err) {
@@ -30,15 +30,28 @@
 
 <form onsubmit={submit} class="space-y-4">
 	<div class="space-y-1.5">
-		<Label for="login-nickname">Nickname</Label>
-		<Input id="login-nickname" bind:value={nickname} placeholder="your_nickname" autocomplete="username" required />
+		<Label for="login-username">Username</Label>
+		<Input
+			id="login-username"
+			bind:value={username}
+			placeholder="your_username"
+			autocomplete="username"
+			required
+		/>
 	</div>
 	<div class="space-y-1.5">
 		<Label for="login-password">Password</Label>
-		<Input id="login-password" type="password" bind:value={password} placeholder="••••••••" autocomplete="current-password" required />
+		<Input
+			id="login-password"
+			type="password"
+			bind:value={password}
+			placeholder="••••••••"
+			autocomplete="current-password"
+			required
+		/>
 	</div>
 	{#if error}
-		<p class="text-destructive text-sm">{error}</p>
+		<p class="text-sm text-destructive">{error}</p>
 	{/if}
 	<Button type="submit" class="w-full" disabled={loading}>
 		{loading ? 'Signing in…' : 'Sign in'}

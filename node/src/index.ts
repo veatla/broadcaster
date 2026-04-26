@@ -1,6 +1,7 @@
 import express from "express";
 import http from "http";
 import { registerAllRoutes } from "./routes";
+import { createSocketServer } from "./socket/io";
 
 const PORT = process.env.NODE_PORT ?? 3000;
 
@@ -24,6 +25,7 @@ app.get("/", (req, res) => {
 registerAllRoutes(app);
 
 const server = http.createServer(app);
+createSocketServer(server);
 const listener = server.listen(Number(PORT), "0.0.0.0", () => {
     const address = listener.address();
     if (typeof address === "string" || !address) process.exit(1);

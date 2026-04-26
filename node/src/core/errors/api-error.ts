@@ -6,7 +6,7 @@
  *     BadRequest | Unauthorized | Forbidden | NotFound |
  *     Conflict | UnprocessableEntity | InternalServerError
  *     └── Module-specific errors — `modules/<name>/errors/*`
- *         e.g. IncorrectLoginData, NicknameTaken, UserNotFound
+ *         e.g. IncorrectLoginData, UsernameTaken, UserNotFound
  *
  * ## Rules
  * - **Handlers** only throw module-specific errors (leaf classes).

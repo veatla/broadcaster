@@ -5,6 +5,7 @@ import { eq, and } from "drizzle-orm";
 import { privateChatId } from "../../chats/private-chat-id";
 import { NotFound, Forbidden } from "$app/core/errors/http";
 import { tables } from "$app/db/tables";
+import { getIO } from "$app/socket/io";
 
 const bodySchema = z.object({
     content: z.string().min(1).max(4000),
@@ -56,6 +57,10 @@ export const sendMessageHandler = $(
 
             return message;
         });
+
+        if (result) {
+            getIO().to(`chat:${result.chat_id}`).emit("message:new", result);
+        }
 
         return result;
     },

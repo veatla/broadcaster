@@ -16,7 +16,7 @@ export const listChatsHandler = $(
                 avatar: tables.chats.avatar,
                 created_at: tables.chats.created_at,
                 other_user_id: tables.users.id,
-                other_nickname: tables.users.username,
+                other_username: tables.users.username,
                 other_first_name: tables.users.first_name,
                 other_last_name: tables.users.last_name,
                 other_profile_photo: tables.users.profile_photo,

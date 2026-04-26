@@ -5,7 +5,7 @@ import db from "../../../db/drizzle.client";
 import { $ } from "$app/core/request";
 
 export const userRegisterSchema = z.object({
-    nickname: z.string().min(1).max(64),
+    username: z.string().min(1).max(64),
     password: z.string().min(8).max(128),
     first_name: z.string().min(1).max(64),
     last_name: z.string().min(1).max(64),
@@ -18,7 +18,7 @@ export const userRegisterHandler = $(
             const user = await AuthModule.createUser(trx, {
                 first_name: body.first_name,
                 last_name: body.last_name,
-                username: body.nickname,
+                username: body.username,
                 password_hash: hashed_password,
             });
             const token = await AuthModule.createSession(trx, user.id);

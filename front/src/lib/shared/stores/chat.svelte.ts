@@ -40,6 +40,7 @@ export const chatStore = {
 		_loadingMessages = v;
 	},
 	appendMessage(msg: Message) {
+		if (_messages.some((m) => m.id === msg.id)) return;
 		_messages = [..._messages, msg];
 	},
 	removeMessage(id: string) {

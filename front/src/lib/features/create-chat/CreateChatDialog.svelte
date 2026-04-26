@@ -63,33 +63,37 @@
 					id="search-user"
 					bind:value={query}
 					oninput={onQueryInput}
-					placeholder="Search by nickname…"
+					placeholder="Search by username…"
 				/>
 			</div>
 			{#if searching}
-				<p class="text-muted-foreground text-sm">Searching…</p>
+				<p class="text-sm text-muted-foreground">Searching…</p>
 			{:else if results.length > 0}
-				<ul class="divide-border divide-y rounded-lg border">
+				<ul class="divide-y divide-border rounded-lg border">
 					{#each results as user (user.id)}
 						<li>
 							<button
-								class="hover:bg-muted flex w-full items-center gap-3 px-3 py-2.5 text-left transition-colors"
+								class="flex w-full items-center gap-3 px-3 py-2.5 text-left transition-colors hover:bg-muted"
 								onclick={() => startChat(user.id)}
 							>
-								<UserAvatar name={`${user.first_name} ${user.last_name}`} photo={user.profile_photo} size="sm" />
+								<UserAvatar
+									name={`${user.first_name} ${user.last_name}`}
+									photo={user.profile_photo}
+									size="sm"
+								/>
 								<div>
 									<p class="text-sm font-medium">{user.first_name} {user.last_name}</p>
-									<p class="text-muted-foreground text-xs">@{user.nickname}</p>
+									<p class="text-xs text-muted-foreground">@{user.username}</p>
 								</div>
 							</button>
 						</li>
 					{/each}
 				</ul>
 			{:else if query.trim() && !searching}
-				<p class="text-muted-foreground text-sm">No users found.</p>
+				<p class="text-sm text-muted-foreground">No users found.</p>
 			{/if}
 			{#if error}
-				<p class="text-destructive text-sm">{error}</p>
+				<p class="text-sm text-destructive">{error}</p>
 			{/if}
 		</div>
 	</Dialog.Content>

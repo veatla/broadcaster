@@ -6,14 +6,15 @@
 	import { goto } from '$app/navigation';
 	import { authStore } from '$lib/shared/stores/auth.svelte';
 	import { onMount } from 'svelte';
+	import { resolve } from '$app/paths';
 
 	onMount(() => {
 		authStore.init();
-		if (authStore.isAuthenticated) goto('/');
+		if (authStore.isAuthenticated) goto(resolve('/'));
 	});
 
 	function onSuccess() {
-		goto('/');
+		goto(resolve('/'));
 	}
 </script>
 
@@ -21,11 +22,11 @@
 	<title>Sign in · Broadcaster</title>
 </svelte:head>
 
-<div class="bg-muted/40 flex min-h-screen items-center justify-center p-4">
+<div class="flex min-h-screen items-center justify-center bg-muted/40 p-4">
 	<div class="w-full max-w-sm">
 		<div class="mb-8 text-center">
 			<h1 class="text-2xl font-bold">Broadcaster</h1>
-			<p class="text-muted-foreground mt-1 text-sm">Sign in or create an account</p>
+			<p class="mt-1 text-sm text-muted-foreground">Sign in or create an account</p>
 		</div>
 		<Tabs.Root value="login">
 			<Tabs.List class="w-full">
