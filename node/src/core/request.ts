@@ -4,9 +4,10 @@ import db from "../db/drizzle.client";
 import { eq } from "drizzle-orm";
 import { APIError } from "./errors/api-error";
 import { Unauthorized } from "./errors/http";
-import { tables, type UserSessionsTable, type UsersTable } from "../db/tables";
-import { encodeHexLowerCase } from "@oslojs/encoding";
-import { sha256 } from "@oslojs/crypto/sha2";
+import { tables } from "$app/db/tables";
+
+export type UsersTable = typeof tables.users.$inferSelect;
+export type UserSessionsTable = typeof tables.userSessions.$inferSelect;
 
 export const sessionCookieName = "auth-session";
 
@@ -17,16 +18,9 @@ interface EndpointHandler {
         path: `/${string}`,
         cb: RequestHandler<Body, Query, Params, AuthRequired>,
         options: {
-            /** Body Schema */
             body?: Body;
-
-            /** Query Schema */
             query?: Query;
-
-            /** Params Schema */
             params?: Params;
-
-            /** Whenever route is requires authorization */
             auth: AuthRequired;
         },
     ): void;
@@ -39,6 +33,7 @@ type UserData<Required extends "optional" | "required" | "disabled", Result = Us
       : Required extends "optional"
         ? Result | null
         : never;
+
 export interface RequestHandler<
     Body extends ZodType | undefined,
     Query extends ZodType | undefined,
@@ -46,22 +41,13 @@ export interface RequestHandler<
     AuthRequired extends "optional" | "required" | "disabled" = "optional",
 > {
     (args: {
-        /** Parsed Body Schema Value */
         body: ParseSchemaType<Body>;
-
-        /** Parsed Query Schema Value */
         query: ParseSchemaType<Query>;
-
-        /** Returns `User` if set in `authRequired` in `params` */
         user: UserData<AuthRequired, UsersTable>;
         session: UserData<AuthRequired, UserSessionsTable>;
-
-        /** Parsed Route Params Schema Value  */
         request: Request;
         response: Response;
         params: ParseSchemaType<Params>;
-
-        /** Function to set status code */
         status: (status: number) => void;
     }): unknown | Promise<unknown>;
 }
@@ -75,39 +61,28 @@ const validateSessionToken = async (
     sessionToken: string,
     authRequired: "optional" | "required" | "disabled" = "optional",
 ): Promise<{ user: UsersTable | null; session: UserSessionsTable | null }> => {
-    const token = sessionToken;
-    if (authRequired == "disabled") return { user: null, session: null };
+    if (authRequired === "disabled") return { user: null, session: null };
 
-    if (!token) {
+    if (!sessionToken) {
         if (authRequired === "required") throw new Unauthorized("No session token");
         return { user: null, session: null };
     }
 
-    const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
-
-    // Implement token verification here
-    // or throw error
     const [result] = await db
-        .select({
-            user: tables.users,
-            session: tables.userSessions,
-        })
+        .select({ user: tables.users, session: tables.userSessions })
         .from(tables.userSessions)
         .innerJoin(tables.users, eq(tables.userSessions.user_id, tables.users.id))
-        .where(eq(tables.userSessions.id, sessionId));
+        .where(eq(tables.userSessions.id, sessionToken));
 
     if (!result) {
         if (authRequired === "required") throw new Unauthorized("Invalid session");
         return { user: null, session: null };
     }
 
-    const { session } = result;
-
-    const isExpired = Date.now() >= session.expires_at.getTime();
-
-    if (isExpired) {
-        await db.delete(tables.userSessions).where(eq(tables.userSessions.id, sessionId));
-        if (!result && authRequired === "required") throw new Unauthorized("Invalid session");
+    if (Date.now() >= result.session.expires_at.getTime()) {
+        await db.delete(tables.userSessions).where(eq(tables.userSessions.id, sessionToken));
+        if (authRequired === "required") throw new Unauthorized("Session expired");
+        return { user: null, session: null };
     }
 
     return result;
@@ -131,11 +106,11 @@ export const $ = function <
 
     return async (req: Request, res: Response) => {
         try {
-            const sessionToken = req.cookies?.[sessionCookieName] ?? (req.headers[sessionCookieName] as string);
-            // Parse Bearer token provided in request header
+            const sessionToken =
+                req.cookies?.[sessionCookieName] ?? (req.headers[sessionCookieName] as string) ?? req.headers["authorization"]?.replace(/^Bearer /, "");
+
             const { session, user } = await validateSessionToken(sessionToken, auth);
 
-            // Response status
             let status = 200;
 
             const response = await cb({
@@ -159,6 +134,7 @@ export const $ = function <
             } else if (error instanceof APIError) {
                 res.status(error.status).json({ error: { code: error.name, message: error.message } });
             } else {
+                console.error(error);
                 res.status(500).json({ error: { code: "InternalServerError", message: "Internal Server Error" } });
             }
         }
@@ -176,13 +152,12 @@ export type ExtendedRouter = {
 
 export function AppRouter() {
     const router = Router();
-
     return <ExtendedRouter>{
         get: (path, cb, options) => router.get(path, $(cb, options)),
         put: (path, cb, options) => router.put(path, $(cb, options)),
         delete: (path, cb, options) => router.delete(path, $(cb, options)),
         post: (path, cb, options) => router.post(path, $(cb, options)),
         patch: (path, cb, options) => router.patch(path, $(cb, options)),
-        router: router,
+        router,
     };
 }

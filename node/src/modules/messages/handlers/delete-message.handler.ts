@@ -2,9 +2,8 @@ import { $ } from "$app/core/request";
 import z from "zod";
 import db from "$app/db/drizzle.client";
 import { eq, and } from "drizzle-orm";
-import { chatsTable, chatMembersTable } from "../../chats/models/chats.model";
-import { messagesTable, messageUserStateTable } from "../models/messages.model";
 import { NotFound, Forbidden } from "$app/core/errors/http";
+import { tables } from "$app/db/tables";
 
 const paramsSchema = z.object({
     id: z.uuid(),
@@ -18,20 +17,20 @@ export const deleteMessageHandler = $(
     async ({ params, body, user }) => {
         await db.transaction(async (trx) => {
             const [message] = await trx
-                .select({ id: messagesTable.id, chat_id: messagesTable.chat_id, sender_id: messagesTable.sender_id })
-                .from(messagesTable)
-                .where(eq(messagesTable.id, params.id));
+                .select({ id: tables.messages.id, chat_id: tables.messages.chat_id, sender_id: tables.messages.sender_id })
+                .from(tables.messages)
+                .where(eq(tables.messages.id, params.id));
 
             if (!message) throw new NotFound("Message not found");
 
             const [membership] = await trx
-                .select({ chat_id: chatMembersTable.chat_id })
-                .from(chatMembersTable)
-                .where(and(eq(chatMembersTable.chat_id, message.chat_id), eq(chatMembersTable.user_id, user.id)));
+                .select({ chat_id: tables.chatMembers.chat_id })
+                .from(tables.chatMembers)
+                .where(and(eq(tables.chatMembers.chat_id, message.chat_id), eq(tables.chatMembers.user_id, user.id)));
 
             if (!membership) throw new Forbidden("Not a member of this chat");
 
-            const [chat] = await trx.select({ type: chatsTable.type }).from(chatsTable).where(eq(chatsTable.id, message.chat_id));
+            const [chat] = await trx.select({ type: tables.chats.type }).from(tables.chats).where(eq(tables.chats.id, message.chat_id));
 
             if (!chat) throw new NotFound("Chat not found");
 
@@ -40,10 +39,10 @@ export const deleteMessageHandler = $(
 
             if (isPrivate && !body.for_all) {
                 await trx
-                    .insert(messageUserStateTable)
+                    .insert(tables.messageUserState)
                     .values({ message_id: params.id, user_id: user.id, deleted_at: now })
                     .onConflictDoUpdate({
-                        target: [messageUserStateTable.message_id, messageUserStateTable.user_id],
+                        target: [tables.messageUserState.message_id, tables.messageUserState.user_id],
                         set: { deleted_at: now },
                     });
             } else {
@@ -52,15 +51,15 @@ export const deleteMessageHandler = $(
                 }
 
                 const members = await trx
-                    .select({ user_id: chatMembersTable.user_id })
-                    .from(chatMembersTable)
-                    .where(eq(chatMembersTable.chat_id, message.chat_id));
+                    .select({ user_id: tables.chatMembers.user_id })
+                    .from(tables.chatMembers)
+                    .where(eq(tables.chatMembers.chat_id, message.chat_id));
 
                 await trx
-                    .insert(messageUserStateTable)
+                    .insert(tables.messageUserState)
                     .values(members.map((m) => ({ message_id: params.id, user_id: m.user_id, deleted_at: now })))
                     .onConflictDoUpdate({
-                        target: [messageUserStateTable.message_id, messageUserStateTable.user_id],
+                        target: [tables.messageUserState.message_id, tables.messageUserState.user_id],
                         set: { deleted_at: now },
                     });
             }

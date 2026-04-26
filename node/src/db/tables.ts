@@ -16,7 +16,7 @@ export const usersTable = pgTable("users", {
     first_name: text("first_name").notNull(),
     last_name: text("last_name").notNull(),
     bio: text("bio"),
-    privacy_flags: bigint("privacy_flags", { mode: "bigint" })
+    privacy_flags: bigint("privacy_flags", { mode: "number" })
         .notNull()
         .default(sql`0`),
     created_at: timestamp("created_at")
@@ -98,14 +98,11 @@ export type UserBlacklistTable = typeof userBlacklistTable.$inferSelect;
 // device_blob, ip_blob, location_blob are E2E encrypted; the server stores raw ciphertext.
 export const userSessionsTable = pgTable("user_sessions", {
     id: text("id").primaryKey(),
-    token: text("token").notNull().unique(),
     user_id: uuid("user_id").notNull(),
     expires_at: timestamp("expires_at").notNull(),
     used_at: timestamp("used_at").notNull().defaultNow(),
     device_blob: bytea("device_blob").notNull(),
     ip_blob: bytea("ip_blob").notNull(),
-    device_id: text("device_id").notNull(),
-    platform: text("platform").$type<"fcm" | "apns">().notNull(),
     location_blob: bytea("location_blob").notNull(),
 });
 export type UserSessionsTable = typeof userSessionsTable.$inferSelect;
@@ -141,7 +138,7 @@ export const deviceSignedPrekeysTable = pgTable(
         device_id: uuid("device_id")
             .notNull()
             .references(() => devicesTable.id, { onDelete: "cascade" }),
-        prekey_id: bigint("prekey_id", { mode: "bigint" }).notNull(),
+        prekey_id: bigint("prekey_id", { mode: "number" }).notNull(),
         public_key: bytea("public_key").notNull(),
         signature: bytea("signature").notNull(),
         created_at: timestamp("created_at", { withTimezone: true })
@@ -157,11 +154,11 @@ export type DeviceSignedPrekeysTable = typeof deviceSignedPrekeysTable.$inferSel
 export const deviceOneTimePrekeysTable = pgTable(
     "device_one_time_prekeys",
     {
-        id: bigserial("id", { mode: "bigint" }).primaryKey(),
+        id: bigserial("id", { mode: "number" }).primaryKey(),
         device_id: uuid("device_id")
             .notNull()
             .references(() => devicesTable.id, { onDelete: "cascade" }),
-        prekey_id: bigint("prekey_id", { mode: "bigint" }).notNull(),
+        prekey_id: bigint("prekey_id", { mode: "number" }).notNull(),
         public_key: bytea("public_key").notNull(),
         created_at: timestamp("created_at", { withTimezone: true })
             .notNull()
@@ -201,7 +198,9 @@ export const chatsTable = pgTable("chats", {
     id: uuid("id")
         .primaryKey()
         .default(sql`uuid_generate_v4()`),
-    chat_type: text("chat_type").$type<"direct" | "group">().notNull(),
+    type: text("type").$type<"private" | "group">().notNull(),
+    title: text("title").notNull().default(""),
+    avatar: text("avatar"),
     created_by_user_id: uuid("created_by_user_id")
         .notNull()
         .references(() => usersTable.id),
@@ -209,6 +208,7 @@ export const chatsTable = pgTable("chats", {
         .notNull()
         .default(sql`NOW()`),
 });
+
 export type ChatsTable = typeof chatsTable.$inferSelect;
 
 export const chatMembersTable = pgTable(
@@ -235,25 +235,32 @@ export type ChatMembersTable = typeof chatMembersTable.$inferSelect;
 // ─── Messages ─────────────────────────────────────────────────────────────────
 
 // Server stores only ciphertext and routing data. x3dh_header present on session-initiating messages.
+
 export const messagesTable = pgTable("messages", {
     id: uuid("id")
-        .primaryKey()
-        .default(sql`uuid_generate_v4()`),
-    chat_id: uuid("chat_id")
-        .notNull()
-        .references(() => chatsTable.id, { onDelete: "cascade" }),
-    sender_device_id: uuid("sender_device_id")
-        .notNull()
-        .references(() => devicesTable.id),
-    content: text("content").notNull(),
-    // ciphertext: bytea("ciphertext").notNull(),
-    // x3dh_header: bytea("x3dh_header"),
-    // msg_type: text("msg_type").$type<"message" | "control" | "sync">().notNull().default("message"),
-    created_at: timestamp("created_at", { withTimezone: true })
-        .notNull()
-        .default(sql`NOW()`),
+        .default(sql`uuid_generate_v4()`)
+        .primaryKey(),
+    chat_id: uuid("chat_id").notNull(),
+    sender_id: uuid("sender_id"),
+    replied_to: uuid("replied_to"),
+    content: text("content"),
+    created_at: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+    updated_at: timestamp("updated_at", { withTimezone: true }),
 });
+
 export type MessagesTable = typeof messagesTable.$inferSelect;
+
+export const messageReactionsTable = pgTable(
+    "message_reactions",
+    {
+        message_id: uuid("message_id").notNull(),
+        user_id: uuid("user_id").notNull(),
+        emoji: text("emoji").notNull(),
+        created_at: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+    },
+    (t) => [primaryKey({ columns: [t.message_id, t.user_id, t.emoji] })],
+);
+export type MessageReactionsTable = typeof messageReactionsTable.$inferSelect;
 
 export const messageUserStateTable = pgTable(
     "message_user_state",
@@ -266,20 +273,6 @@ export const messageUserStateTable = pgTable(
     (t) => [primaryKey({ columns: [t.message_id, t.user_id] })],
 );
 export type MessageUserTable = typeof messageUserStateTable.$inferSelect;
-
-export const messageReactionsTable = pgTable(
-    "message_reactions",
-    {
-        message_id: uuid("message_id").notNull(),
-        user_id: uuid("user_id").notNull(),
-        emoji: text("emoji").notNull(),
-        created_at: timestamp("created_at")
-            .notNull()
-            .default(sql`NOW()`),
-    },
-    (t) => [primaryKey({ columns: [t.message_id, t.user_id, t.emoji] })],
-);
-export type MessageReactionsTable = typeof messageReactionsTable.$inferSelect;
 
 // ─── Attachments ──────────────────────────────────────────────────────────────
 
@@ -340,7 +333,7 @@ export const tables = {
     chats: chatsTable,
     chatMembers: chatMembersTable,
     messages: messagesTable,
-    messageReads: messageUserStateTable,
+    messageUserState: messageUserStateTable,
     messageReactions: messageReactionsTable,
     attachments: attachmentsTable,
     stories: storiesTable,

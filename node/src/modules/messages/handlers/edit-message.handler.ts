@@ -2,8 +2,8 @@ import { $ } from "$app/core/request";
 import z from "zod";
 import db from "$app/db/drizzle.client";
 import { eq } from "drizzle-orm";
-import { messagesTable } from "../models/messages.model";
 import { NotFound, Forbidden } from "$app/core/errors/http";
+import { messagesTable } from "$app/db/tables";
 
 const paramsSchema = z.object({
     id: z.uuid(),
